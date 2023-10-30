@@ -1,0 +1,18 @@
+﻿  practica9avanzada.cpp
+D:\Users\Lazar\Documents\Desktop 20102023\Practica07\Practica07\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+D:\Users\Lazar\Documents\Desktop 20102023\Practica07\Practica07\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+D:\Users\Lazar\Documents\Desktop 20102023\Practica07\Practica07\practica9avanzada.cpp(342,18): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+D:\Users\Lazar\Documents\Desktop 20102023\Practica07\Practica07\practica9avanzada.cpp(344,32): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+D:\Users\Lazar\Documents\Desktop 20102023\Practica07\Practica07\practica9avanzada.cpp(350,28): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\Lazar\Documents\Desktop 20102023\Practica07\Practica07\practica9avanzada.cpp(351,28): warning C4244: '=': conversión de 'double' a 'T'; posible pérdida de datos
+          with
+          [
+              T=float
+          ]
+D:\Users\Lazar\Documents\Desktop 20102023\Practica07\Practica07\practica9avanzada.cpp(449,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Users\Lazar\Documents\Desktop 20102023\Practica07\Practica07\practica9avanzada.cpp(451,33): warning C4244: '+=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+  Practica07.vcxproj -> D:\Users\Lazar\Documents\Desktop 20102023\Practica07\Debug\Practica07.exe

@@ -2,6 +2,8 @@
   Main.cpp
 D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
 D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(55,37): warning C4305: 'inicializando': truncamiento de 'double' a 'GLfloat'
-D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(295,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(57,37): warning C4305: 'inicializando': truncamiento de 'double' a 'GLfloat'
+D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(304,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(492,19): warning C4305: '+=': truncamiento de 'double' a 'float'
+D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(498,19): warning C4305: '-=': truncamiento de 'double' a 'float'
   Proyecto.vcxproj -> D:\Repos\ProyectoFinalVAT\Proyecto\Debug\Proyecto.exe

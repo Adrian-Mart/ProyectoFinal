@@ -1,5 +1,5 @@
 # Blender MTL File: 'Pinball.blend'
-# Material Count: 8
+# Material Count: 10
 
 newmtl Black
 Ns 359.999993
@@ -20,7 +20,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 3
-map_Kd CoinSlot.png
+map_Kd D:\\Users\\Lazar\\Documents\\Programacion\\ProyectoFinal\\ProyectoFinal\\Modelado 3D\\textures\\CoinSlot.png
 
 newmtl Gold.001
 Ns 1000.000000
@@ -41,7 +41,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd MachineBody.png
+map_Kd D:\\Users\\Lazar\\Documents\\Programacion\\ProyectoFinal\\ProyectoFinal\\Modelado 3D\\textures\\MachineBody.png
 
 newmtl Map
 Ns 359.999993
@@ -52,7 +52,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd Map_Color.png
+map_Kd D:\\Repos\\ProyectoFinalVAT\\Modelado 3D\\Map_Color.png
 
 newmtl Material
 Ns 359.999993
@@ -63,7 +63,17 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd Plain.png
+map_Kd D:\\Repos\\ProyectoFinalVAT\\Modelado 3D\\Ground.png
+
+newmtl Metal
+Ns 359.999993
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
 
 newmtl Red
 Ns 359.999993
@@ -84,4 +94,15 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd Score.png
+map_Kd D:\\Users\\Lazar\\Documents\\Programacion\\ProyectoFinal\\ProyectoFinal\\Modelado 3D\\textures\\Score.png
+
+newmtl Sphere
+Ns 718.606178
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 0.700000 0.700000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd D:\\Users\\Lazar\\Documents\\Programacion\\ProyectoFinal\\ProyectoFinal\\Modelado 3D\\textures\\Sphere.png

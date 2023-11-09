@@ -48,6 +48,8 @@ Model fliper;
 Model fliperGateMetal;
 Model fliperGateWood;
 Model glass;
+Model vampArm;
+Model vamp;
 
 
 GLfloat deltaTime = 0.0f;
@@ -263,6 +265,10 @@ int main()
 	fliperGateWood.LoadModel("Models/FliperGateWood.obj");
 	machine = Model();
 	machine.LoadModel("Models/Pinball.obj");
+	vampArm = Model();
+	vampArm.LoadModel("Models/VampArm.obj");
+	vamp = Model();
+	vamp.LoadModel("Models/Vamp.obj");
 
 
 
@@ -290,6 +296,9 @@ int main()
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 
+
+	float testArm = 0.0f;
+	bool dir = false;
 	while (!mainWindow.getShouldClose())
 	{
 		GLfloat now = glfwGetTime();
@@ -402,6 +411,95 @@ int main()
 		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		fliperGateMetal.RenderModel();
+		
+		//vamp1 (UP,RIGHT)
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(9, 0.7, -3));
+		model = glm::scale(model, glm::vec3(0.5));
+		model = glm::scale(model, glm::vec3(-1, 1, 1));
+		model = glm::rotate(model, glm::radians(testArm), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vampArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2, 0, 0));
+		model = glm::rotate(model, glm::radians(-testArm*2), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vampArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2, 0, 0));
+		model = glm::rotate(model, glm::radians(testArm), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vamp.RenderModel();
+		
+			//vamp2 (UP,LEFT)
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-9, 0.7, -3));
+		model = glm::scale(model, glm::vec3(0.5));
+		model = glm::rotate(model, glm::radians(testArm), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vampArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2, 0, 0));
+		model = glm::rotate(model, glm::radians(-testArm*2), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vampArm.RenderModel();
+		
+		model = glm::translate(model, glm::vec3(2, 0, 0));
+		model = glm::rotate(model, glm::radians(testArm), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vamp.RenderModel();
+
+			//vamp3 (DOWN,LEFT)
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-9, 0.7, 4));
+		model = glm::scale(model, glm::vec3(0.5));
+		model = glm::rotate(model, glm::radians(testArm), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vampArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2, 0, 0));
+		model = glm::rotate(model, glm::radians(-testArm * 2), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vampArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2, 0, 0));
+		model = glm::rotate(model, glm::radians(testArm), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vamp.RenderModel();
+			//vamp4 (DOWN,RIGHT)
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(9, 0.7, 4));
+		model = glm::scale(model, glm::vec3(0.5));
+		model = glm::scale(model, glm::vec3(-1, 1, 1));
+		model = glm::rotate(model, glm::radians(testArm), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vampArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2, 0, 0));
+		model = glm::rotate(model, glm::radians(-testArm * 2), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vampArm.RenderModel();
+
+		model = glm::translate(model, glm::vec3(2, 0, 0));
+		model = glm::rotate(model, glm::radians(testArm), glm::vec3(0, 0, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		vamp.RenderModel();
+
+
+		//Animaciones
+		if (dir)
+		{
+			testArm += 0.05;
+			if (testArm >= 80.0f)
+				dir = false;
+		}
+		else
+		{
+			testArm -= 0.05;
+			if (testArm <= 0.0f)
+				dir = true;
+		}
+
 
 
 		//blending: transparencia o traslucidez

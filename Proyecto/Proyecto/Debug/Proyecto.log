@@ -1,9 +1,11 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(514,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (Practica07.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
+﻿D:\Programs\VisualStudio\IDE\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (Practica07.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
   Main.cpp
-D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(57,37): warning C4305: 'inicializando': truncamiento de 'double' a 'GLfloat'
-D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(304,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(492,19): warning C4305: '+=': truncamiento de 'double' a 'float'
-D:\Repos\ProyectoFinalVAT\Proyecto\Proyecto\Main.cpp(498,19): warning C4305: '-=': truncamiento de 'double' a 'float'
-  Proyecto.vcxproj -> D:\Repos\ProyectoFinalVAT\Proyecto\Debug\Proyecto.exe
+D:\Users\Lazar\Documents\Programacion\ProyectoFinal\ProyectoFinal\Proyecto\Proyecto\Window.h(12,36): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+D:\Users\Lazar\Documents\Programacion\ProyectoFinal\ProyectoFinal\Proyecto\Proyecto\Window.h(13,37): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+D:\Users\Lazar\Documents\Programacion\ProyectoFinal\ProyectoFinal\Proyecto\Proyecto\Main.cpp(78,25): warning C4305: 'inicializando': truncamiento de 'double' a 'GLfloat'
+D:\Users\Lazar\Documents\Programacion\ProyectoFinal\ProyectoFinal\Proyecto\Proyecto\Main.cpp(1255,15): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Users\Lazar\Documents\Programacion\ProyectoFinal\ProyectoFinal\Proyecto\Proyecto\Main.cpp(1282,35): warning C4244: 'argumento': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+D:\Users\Lazar\Documents\Programacion\ProyectoFinal\ProyectoFinal\Proyecto\Proyecto\Main.cpp(1488,17): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Users\Lazar\Documents\Programacion\ProyectoFinal\ProyectoFinal\Proyecto\Proyecto\Main.cpp(1500,16): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+D:\Users\Lazar\Documents\Programacion\ProyectoFinal\ProyectoFinal\Proyecto\Proyecto\Main.cpp(1220,12): warning C4101: 'auxVector': variable local sin referencia
+  Proyecto.vcxproj -> D:\Users\Lazar\Documents\Programacion\ProyectoFinal\ProyectoFinal\Proyecto\Debug\Proyecto.exe

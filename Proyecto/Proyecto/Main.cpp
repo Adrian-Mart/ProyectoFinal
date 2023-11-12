@@ -63,6 +63,11 @@ Model lever;
 Model cow;
 Model cowArm;
 Model cowHead;
+Model chicken;
+Model chickenHead;
+Model chickenWing;
+Model chickenLeg;
+
 
 
 GLfloat deltaTime = 0.0f;
@@ -1033,6 +1038,15 @@ int main()
 	lever = Model();
 	lever.LoadModel("Models/Lever.obj");
 
+	chicken = Model();
+	chicken.LoadModel("Models/Gallina/Gallina_Cuerpo.obj");
+	chickenHead = Model();
+	chickenHead.LoadModel("Models/Gallina/Gallina_Cabeza.obj");
+	chickenWing = Model();
+	chickenWing.LoadModel("Models/Gallina/Gallina_Ala.obj");
+	chickenLeg = Model();
+	chickenLeg.LoadModel("Models/Gallina/Gallina_Pata.obj");
+
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
@@ -1188,6 +1202,7 @@ int main()
 		hallwayTexture.UseTexture();
 		meshList[1]->RenderMesh();
 
+
 		model = modelaux;
 		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1206,6 +1221,36 @@ int main()
 		model = glm::mat4(1.0);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		tree.RenderModel();
+
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 0.060f, -4.65685f));
+		modelaux = model;
+		
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		chicken.RenderModel();
+
+		model = glm::translate(modelaux, glm::vec3(0, 0.27, 0.04));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		chickenHead.RenderModel();
+
+		model = glm::translate(modelaux, glm::vec3(0.055, 0.16, -0.055));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		chickenLeg.RenderModel();
+
+		model = glm::translate(modelaux, glm::vec3(-0.055, 0.16, -0.055));
+		model = glm::scale(model, glm::vec3(-1, 1, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		chickenLeg.RenderModel();
+
+		model = glm::translate(modelaux, glm::vec3(0.05, 0.25, 0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		chickenWing.RenderModel();
+
+		model = glm::translate(modelaux, glm::vec3(-0.05, 0.25, 0));
+		model = glm::scale(model, glm::vec3(-1, 1, 1));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		chickenWing.RenderModel();
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 0.13f, 4.65685f));

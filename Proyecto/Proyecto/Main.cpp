@@ -39,6 +39,10 @@ Camera camera;
 Texture dirtTexture;
 Texture hallwayTexture;
 Texture castleTexture;
+Texture NumerosTexture;
+Texture t1;
+Texture t2;
+Texture t3;
 Skybox skybox;
 
 Material Material_brillante;
@@ -60,9 +64,13 @@ Model vampArm;
 Model vamp;
 Model screw;
 Model lever;
+Model bat;
+Model batWR;
+Model batWL;
 Model cow;
 Model cowArm;
 Model cowHead;
+Model gallina;
 
 
 GLfloat deltaTime = 0.0f;
@@ -876,15 +884,15 @@ void CreateObjects()
 	};
 
 	unsigned int scoreIndices[] = {
-	   0, 1, 2,
-	   0, 2, 3,
+	   0, 2, 1,
+	   1, 2, 3,
 	};
 
 	GLfloat scoreVertices[] = {
-		-0.5f, 0.0f, 0.5f,		0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
-		0.5f, 0.0f, 0.5f,		1.0f, 0.0f,		0.0f, -1.0f, 0.0f,
-		0.5f, 0.0f, -0.5f,		1.0f, 1.0f,		0.0f, -1.0f, 0.0f,
-		-0.5f, 0.0f, -0.5f,		0.0f, 1.0f,		0.0f, -1.0f, 0.0f,
+		-1.0f, 0.0f, 10.0f,		0.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+		1.0f, 0.0f, 10.0f,		1.0f, 0.0f,		0.0f, -1.0f, 0.0f,
+		-1.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, -1.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, -1.0f, 0.0f,
 
 	};
 
@@ -894,10 +902,10 @@ void CreateObjects()
 	};
 
 	GLfloat numeroVertices[] = {
-		-0.5f, 0.0f, 0.5f,		0.0f, 0.67f,		0.0f, -1.0f, 0.0f,
-		0.5f, 0.0f, 0.5f,		0.25f, 0.67f,		0.0f, -1.0f, 0.0f,
-		0.5f, 0.0f, -0.5f,		0.25f, 1.0f,		0.0f, -1.0f, 0.0f,
-		-0.5f, 0.0f, -0.5f,		0.0f, 1.0f,		0.0f, -1.0f, 0.0f,
+		-0.4f, 0.0f, 0.4f,		0.0f, 0.67f,		0.0f, -1.0f, 0.0f,
+		0.4f, 0.0f, 0.4f,		0.25f, 0.67f,		0.0f, -1.0f, 0.0f,
+		0.4f, 0.0f, -0.4f,		0.25f, 1.0f,		0.0f, -1.0f, 0.0f,
+		-0.4f, 0.0f, -0.4f,		0.0f, 1.0f,		0.0f, -1.0f, 0.0f,
 
 	};
 
@@ -963,12 +971,100 @@ float animateFliper(Key key, float rotation, float deltaTime)
 	return rotation;
 }
 
+glm::vec2 GetOffset(int digit)
+{
+	float offsetX = 0.0f;
+	float offsetY = 0.0f;
+	switch (digit)
+	{
+	case 0:
+		offsetX = 0.25f;
+		offsetY = -0.67f;
+		break;
+	case 1:
+		offsetX = 0.0f;
+		offsetY = 0.0f;
+		break;
+	case 2:
+		offsetX = 0.25f;
+		offsetY = 0.0f;
+		break;
+	case 3:
+		offsetX = 0.50f;
+		offsetY = 0.0f;
+		break;
+	case 4:
+		offsetX = 0.75f;
+		offsetY = 0.0f;
+		break;
+	case 5:
+		offsetX = 0.00f;
+		offsetY = -0.34f;
+		break;
+	case 6:
+		offsetX = 0.25f;
+		offsetY = -0.34f;
+		break;
+	case 7:
+		offsetX = 0.50f;
+		offsetY = -0.34f;
+		break;
+	case 8:
+		offsetX = 0.75f;
+		offsetY = -0.34f;
+		break;
+	case 9:
+		offsetX = 0.0f;
+		offsetY = -0.67f;
+		break;
+	}
+
+	return glm::vec2(offsetX, offsetY);
+}
+
+struct Lorenz
+{
+	float sigma = 10.0f / 5.0f;
+	float rho = 28.0f / 5.0f;
+	float beta = (8.0f / 3.0f) / 5.0f;
+	float x = 0.1f;
+	float y = 0.2f;
+	float z = 0.3f;
+	glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+};
+
+void UpdateLorenz(Lorenz& l, float dt)
+{
+	float dx = l.sigma * (l.y - l.x);
+	float dy = l.x * (l.rho - l.z) - l.y;
+	float dz = l.x * l.y - l.beta * l.z;
+
+	l.x += dt * dx;
+	l.y += dt * dy;
+	l.z += dt * dz;
+
+	l.position.x = l.x;
+	l.position.y = l.z;
+	l.position.z = 0;
+}
+
+float GetAngleBetweenTwoVectors(glm::vec3 a, glm::vec3 b)
+{
+	float dot = glm::dot(a, b);
+	float length = glm::length(a) * glm::length(b);
+	float angle = glm::acos(dot / length);
+	return angle;
+}
+
 int main()
 {
+
 	const int stepsPerFrame = 5;
 	Animation animation = Animation("MarbleAnimation.txt");
-
 	Animation animation2 = Animation("Marble2Animation.txt");
+	Animation animation3 = Animation("Marble3Animation.txt");
+	int startv2onframe = 15 * 6 - 15;
+	int startv1onframe = 15 * 6 - 15;
 
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
 	mainWindow.Initialise();
@@ -978,7 +1074,9 @@ int main()
 	CreateObjects();
 	CreateShaders();
 
-	camera = Camera(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
+	Camera bodycamera = Camera(glm::vec3(0.0f, 1.0f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
+	Camera staticCamera = Camera(glm::vec3(0.0f, 50.0f, 20.0f), glm::vec3(0.0f, 1.0f, 0.0f), -89.0, -59.5f, 0, 0);
+
 
 	dirtTexture = Texture("Textures/Snow_Color.png");
 	dirtTexture.LoadTextureA();
@@ -986,15 +1084,33 @@ int main()
 	castleTexture.LoadTextureA();
 	hallwayTexture = Texture("Textures/Hallway_Color.png");
 	hallwayTexture.LoadTextureA();
+	NumerosTexture = Texture("Textures/numerosbase.tga");
+	NumerosTexture.LoadTextureA();
+	t1 = Texture("Textures/T1_Color.png");
+	t1.LoadTextureA();
+	t2 = Texture("Textures/T2_Color.png");
+	t2.LoadTextureA();
+	t3 = Texture("Textures/T3_Color.png");
+	t3.LoadTextureA();
 
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/SkyboxDayLeft.tga");
-	skyboxFaces.push_back("Textures/Skybox/SkyboxDayRight.tga");
-	skyboxFaces.push_back("Textures/Skybox/SkyboxDayDown.tga");
-	skyboxFaces.push_back("Textures/Skybox/SkyboxDayUp.tga");
-	skyboxFaces.push_back("Textures/Skybox/SkyboxDayBack.tga");
-	skyboxFaces.push_back("Textures/Skybox/SkyboxDayFront.tga");
-	skybox = Skybox(skyboxFaces);
+	skyboxFaces.push_back("Textures/Skybox/LeftDay.png");
+	skyboxFaces.push_back("Textures/Skybox/RightDay.png");
+	skyboxFaces.push_back("Textures/Skybox/DownDay.png");
+	skyboxFaces.push_back("Textures/Skybox/UpDay.png");
+	skyboxFaces.push_back("Textures/Skybox/BackDay.png");
+	skyboxFaces.push_back("Textures/Skybox/FrontDay.png");
+	Skybox day = Skybox(skyboxFaces);
+
+	skyboxFaces = std::vector<std::string>();
+	skyboxFaces.push_back("Textures/Skybox/LeftNight.png");
+	skyboxFaces.push_back("Textures/Skybox/RightNight.png");
+	skyboxFaces.push_back("Textures/Skybox/DownNight.png");
+	skyboxFaces.push_back("Textures/Skybox/UpNight.png");
+	skyboxFaces.push_back("Textures/Skybox/BackNight.png");
+	skyboxFaces.push_back("Textures/Skybox/FrontNight.png");
+	Skybox night = Skybox(skyboxFaces);
+
 
 	glass = Model();
 	glass.LoadModel("Models/Glass.obj");
@@ -1032,6 +1148,14 @@ int main()
 	screw.LoadModel("Models/Screw.obj");
 	lever = Model();
 	lever.LoadModel("Models/Lever.obj");
+	bat = Model();
+	bat.LoadModel("Models/BatBody.obj");
+	batWR = Model();
+	batWR.LoadModel("Models/BatWingR.obj");
+	batWL = Model();
+	batWL.LoadModel("Models/BatWingL.obj");
+	gallina = Model();
+	gallina.LoadModel("Models/Gallina.obj");
 
 
 	Material_brillante = Material(4.0f, 256);
@@ -1042,15 +1166,32 @@ int main()
 		0.5f, 0.3f,
 		0.0f, 0.0f, -1.0f);
 	unsigned int pointLightCount = 0;
+	PointLight avatarLight = PointLight(1.0f, 0.0f, 0.0f,
+		0.0f, 3.0f,
+		0.0f, 0.0f, 0.0f,
+		0.3f, 0.2f, 0.1f);
+	pointLights[pointLightCount++] = avatarLight;
+	PointLight obstacleLight = PointLight(1.0f, 0.0f, 0.0f,
+		0.0f, 1.0f,
+		0.0f, 0.0f, 0.0f,
+		0.3f, 0.2f, 0.1f);
+	pointLights[pointLightCount++] = obstacleLight;
 
 	unsigned int spotLightCount = 0;
-	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+	SpotLight pinballLight = SpotLight(1.0f, 1.0f, 1.0f,
 		0.0f, 2.0f,
-		0.0f, 0.0f, 0.0f,
+		0.0f, 40.0f, 0.0f,
 		0.0f, -1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		5.0f);
-	spotLightCount++;
+		1.0f, 0.5f, 0.0f,
+		30.0f);
+	SpotLight flipperLight = SpotLight(1.0f, 1.0f, 1.0f,
+		0.0f, 2.0f,
+		0.0f, 0.1f, 8.0f,
+		0.0f, 0.0f, 1.0f,
+		1.0f, 0.5f, 0.0f,
+		80.0f);
+	spotLights[spotLightCount++] = pinballLight;
+	spotLights[spotLightCount++] = flipperLight;
 
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
@@ -1061,7 +1202,6 @@ int main()
 	int animationState = 0;
 	const float frameWait = 1.0f / 24.0f;
 	float animationTime = 0.0f;
-	int currentFrame = 0;
 	int currentKeyframe = 0;
 	int aKey = -1;
 	const int totalFrames = 45;
@@ -1082,12 +1222,33 @@ int main()
 	float house1Rotation = 0;
 	float fliper1 = 0, fliper2 = 0, fliper3 = 0, fliper4 = 0;
 	float vamp1 = 100, vamp2 = 0, vamp3 = 0, vamp4 = 0;
+	float screwValue = 0;
 	Key fliper1Key = Key();
 	Key fliper2Key = Key();
 	Key fliper3Key = Key();
 	Key fliper4Key = Key();
+	Key light1Key = Key();
+	Key light2Key = Key();
+	Key light3Key = Key();
+	Key cameraKey = Key();
+	Key coinKey = Key();
+	Key screwKey = Key();
 
 	bool sentido = false;
+	Lorenz lorenz;
+	float elapsedTime = 0;
+	int d0 = 0, d1 = 0, d2 = 0, d3 = 0, d4 = 0, d5 = 0;
+	bool inGame = false;
+	bool usebodycamera = true;
+	double time = 0;
+	double daytime = 0;
+	bool light1 = false, light2 = false, light3 = false;
+	float frameTime = 0;
+	const float frameTimeLimit = 0.2f;
+	int frame = 0;
+	int game = 0;
+	int activeFrames = -1;
+	bool needsCoin = true;
 
 	while (!mainWindow.getShouldClose())
 	{
@@ -1095,17 +1256,37 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
+		daytime += deltaTime;
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		camera.keyControl(mainWindow.getsKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		bodycamera.keyControl(mainWindow.getsKeys(), deltaTime);
+		bodycamera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+
+		if (usebodycamera)
+			camera = bodycamera;
+		else
+			camera = staticCamera;
+
+		if (daytime > 500.0f)
+		{
+			castleRotation += 0.5f * deltaTime;
+			skybox = night;
+		}
+		else
+			skybox = day;
+
+		if (daytime > 1000.0f)
+			daytime = 0.0f;
+
+		mainLight.setzDirection(std::sin(glm::radians((daytime * 360.0f) / 1000.0f)));
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
 		shaderList[0].UseShader();
+
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
 		uniformView = shaderList[0].GetViewLocation();
@@ -1122,15 +1303,108 @@ int main()
 		fliper2Key.Update(mainWindow.getsKeys()[GLFW_KEY_X]);
 		fliper3Key.Update(mainWindow.getsKeys()[GLFW_KEY_C]);
 		fliper4Key.Update(mainWindow.getsKeys()[GLFW_KEY_V]);
+		cameraKey.Update(mainWindow.getsKeys()[GLFW_KEY_L]);
+		screwKey.Update(mainWindow.getsKeys()[GLFW_KEY_SPACE]);
+		light1Key.Update(mainWindow.getsKeys()[GLFW_KEY_1]);
+		light2Key.Update(mainWindow.getsKeys()[GLFW_KEY_2]);
+		light3Key.Update(mainWindow.getsKeys()[GLFW_KEY_3]);
+		coinKey.Update(mainWindow.getsKeys()[GLFW_KEY_0]);
+
+		if (needsCoin && coinKey.IsReleased())
+		{
+			needsCoin = false;
+			game = 0;
+			d0 = 0, d1 = 0, d2 = 0, d3 = 0, d4 = 0, d5 = 0;
+		}
+
+		if (screwKey.IsReleased())
+			inGame = !needsCoin;
+
+		if (cameraKey.IsPressed())
+			usebodycamera = !usebodycamera;
+
+		if (light1Key.IsPressed())
+			light1 = !light1;
+
+		if (light2Key.IsPressed())
+			light2 = !light2;
+
+		if (light3Key.IsPressed())
+			light3 = !light3;
+
+		spotLightCount = 0;
+		if (light1)
+			spotLights[spotLightCount++] = pinballLight;
+		if (light2)
+			spotLights[spotLightCount++] = flipperLight;
+
+		pointLightCount = 0;
+		if (light3)
+			pointLights[pointLightCount++] = avatarLight;
+
+		if ((frame >= startv1onframe && game == 0))
+		{
+			if (sentido)
+			{
+				if (vamp1 <= 0)
+					sentido = false;
+				else
+					vamp1 -= 5.0f * deltaTime;
+			}
+			else
+			{
+				if (vamp1 >= 100)
+					sentido = true;
+				else
+					vamp1 += 5.0f * deltaTime;
+			}
+			obstacleLight.SetPosition(glm::vec3(9.5f, 0.85f + vamp1, -3.0f));
+			pointLights[pointLightCount++] = obstacleLight;
+		}
+
+		if ((frame >= startv2onframe && game == 1))
+		{
+			if (sentido)
+			{
+				if (vamp2 <= 0)
+					sentido = false;
+				else
+					vamp2 -= 5.0f * deltaTime;
+			}
+			else
+			{
+				if (vamp2 >= 100)
+					sentido = true;
+				else
+					vamp2 += 5.0f * deltaTime;
+			}
+			obstacleLight.SetPosition(glm::vec3(-9.5f, 0.85f + vamp2, -3.0f));
+			pointLights[pointLightCount++] = obstacleLight;
+		}
+
+		if (inGame)
+		{
+			frameTime += deltaTime;
+			if (frameTime > frameTimeLimit)
+			{
+				frameTime = 0;
+				frame++;
+				printf("%d: %d\n", game, frame);
+				if (frame > 150)
+				{
+					game++;
+					frame = 0;
+					inGame = false;
+
+					if (game > 2)
+						needsCoin = true;
+				}
+			}
+		}
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
-
-		// luz ligada a la cámara de tipo flash
-		glm::vec3 lowerLight = camera.getCameraPosition();
-		lowerLight.y -= 0.3f;
-		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
@@ -1153,7 +1427,7 @@ int main()
 		meshList[0]->RenderMesh();
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
-		castleRotation += 0.5f * deltaTime;
+
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -14.0f));
 		model = glm::rotate(model, glm::radians(castleRotation), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -1207,6 +1481,38 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		tree.RenderModel();
 
+		time += deltaTime;
+		model = glm::mat4(1.0);
+		glm::vec3 avatarPosition = glm::vec3(0.0f, 0.0f, -2.0f);
+		avatarPosition += camera.getCameraPosition();
+		float sinTime = std::sin(glm::radians(time)) / 4.0f;
+		avatarPosition += glm::vec3(0.0f, sinTime, 0.0f);
+		if (time >= 360)
+			time = 0;
+		model = glm::translate(model, avatarPosition);
+		avatarLight.SetPosition(avatarPosition);
+		pointLights[0] = avatarLight;
+		model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		bat.RenderModel();
+
+		sinTime = 25 * std::sin(glm::radians(time * 20));
+		sinTime = glm::radians(sinTime);
+
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(0.9f, 0.0f, 0.0f));
+		model = glm::rotate(model, sinTime, glm::vec3(0.0f, 0.0f, -1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		batWR.RenderModel();
+
+		model = modelaux;
+		model = glm::translate(model, glm::vec3(-0.9f, 0.0f, 0.0f));
+		model = glm::rotate(model, sinTime, glm::vec3(0.0f, 0.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		batWL.RenderModel();
+
+
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 0.13f, 4.65685f));
 		modelaux = model;
@@ -1248,6 +1554,25 @@ int main()
 		model = glm::rotate(model, glm::radians(135.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		house03.RenderModel();
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -4.65685f));
+		model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		gallina.RenderModel();
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-0.4f, 0.0f, -4.65685f));
+		model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		gallina.RenderModel();
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.4f, 0.0f, -4.65685f));
+		model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));
+		modelaux = model;
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		gallina.RenderModel();
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -4.65685f));
@@ -1305,23 +1630,53 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		fliperGateMetal.RenderModel();
 
+		int currentFrame = 0;
+		if (game == 0) currentFrame = frame + 15;
+
 		model = animation.getTransformMatrix(currentFrame);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		marble.RenderModel();
 
+		currentFrame = 0;
+		if (game == 0) currentFrame = 15;
+		if (game == 1) currentFrame = frame + 30;
 		model = animation2.getTransformMatrix(currentFrame);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		marble.RenderModel();
 
+		currentFrame = 0;
+		if (game == 0) currentFrame = 15;
+		if (game == 1) currentFrame = 30;
+		if (game == 2) currentFrame = frame + 45;
+		model = animation3.getTransformMatrix(currentFrame);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		marble.RenderModel();
+
+		if (screwKey.IsHold() && screwValue > -0.25f) {
+			screwValue -= 0.01f * deltaTime;
+		}
+		else if (screwKey.IsHold())
+		{
+			screwValue = -0.25f;
+		}
+		else if (screwKey.IsHold() == false && screwValue < 0.0f)
+		{
+			screwValue += 0.01f * deltaTime;
+		}
+		else
+		{
+			screwValue = 0.0f;
+		}
+
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(10.5f, 0.5f, 12.2f));
+		model = glm::translate(model, glm::vec3(10.5f, 0.5f, 12.2f - screwValue));
 		model = glm::scale(model, glm::vec3(0.65f, 0.65f, 0.65f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		lever.RenderModel();
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(10.5f, 0.5f, 12.2f));
-		model = glm::scale(model, glm::vec3(0.65f, 0.65f, 0.65f));
+		model = glm::scale(model, glm::vec3(0.65f, 0.65f, 0.65f * (screwValue + 1)));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		screw.RenderModel();
 
@@ -1364,25 +1719,25 @@ int main()
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * 0.7f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp2 * 0.7f), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * -1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp2 * -1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * 1.25f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp2 * 1.25f), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * -0.45f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp2 * -0.45f), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vamp.RenderModel();
 
@@ -1395,25 +1750,25 @@ int main()
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * 0.7f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp3 * 0.7f), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * -1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp3 * -1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * 1.25f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp3 * 1.25f), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * -0.45f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp3 * -0.45f), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vamp.RenderModel();
 
@@ -1425,62 +1780,198 @@ int main()
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * 0.7f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp4 * 0.7f), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * -1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp4 * -1.5f), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * 1.25f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp4 * 1.25f), glm::vec3(0.0f, 0.0f, 1.0f));
 		modelaux = model;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vampArm.RenderModel();
 		model = modelaux;
 		model = glm::translate(model, glm::vec3(1.9f, 0.0f, 0.1f));
-		model = glm::rotate(model, glm::radians(vamp1 * -0.45f), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, glm::radians(vamp4 * -0.45f), glm::vec3(0.0f, 0.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		vamp.RenderModel();
 
-		
-		if (sentido)
-		{
-			if(vamp1 <= 0)
-				sentido = false;
-			else
-				vamp1 -= deltaTime;
-		}
-		else
-		{
-			if (vamp1 >= 100)
-				sentido = true;
-			else
-				vamp1 += deltaTime;
-		}
 
-		
+
+
+
 
 
 
 		//blending: transparencia o traslucidez
 		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (inGame)
+		{
+			elapsedTime += deltaTime;
+			if (elapsedTime >= 25.0f)
+			{
+				d0++;
+				elapsedTime = 0.0f;
+			}
+			if (d0 == 10)
+			{
+				d0 = 0;
+				d1++;
+			}
+			if (d1 == 10)
+			{
+				d1 = 0;
+				d2++;
+			}
+			if (d2 == 10)
+			{
+				d2 = 0;
+				d3++;
+			}
+			if (d3 == 10)
+			{
+				d3 = 0;
+				d4++;
+			}
+			if (d4 == 10)
+			{
+				d4 = 0;
+				d5++;
+			}
+			if (d5 == 10)
+			{
+				d5 = 0;
+			}
+		}
+
+		float xNum = 2.3f, xscore = -4, yscore = 16.0f, zscore = -20.0f;
+		int digitIndex = 0;
+		toffset = GetOffset(d5);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(xscore + xNum * digitIndex++, yscore, zscore));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		NumerosTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		toffset = GetOffset(d4);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(xscore + xNum * digitIndex++, yscore, zscore));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		NumerosTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		toffset = GetOffset(d3);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(xscore + xNum * digitIndex++, yscore, zscore));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		NumerosTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		toffset = GetOffset(d2);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(xscore + xNum * digitIndex++, yscore, zscore));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		NumerosTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		toffset = GetOffset(d1);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(xscore + xNum * digitIndex++, yscore, zscore));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		NumerosTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+
+		toffset = GetOffset(d0);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(xscore + xNum * digitIndex++, yscore, zscore));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		color = glm::vec3(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		NumerosTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+		toffset = glm::vec3(0, 0, 0);
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		machine.RenderModel();
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		toffset = glm::vec2(0, (float)frame/150.0f);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.5f, 0.001f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		t2.UseTexture();
+		meshList[3]->RenderMesh();
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+
+		toffset = glm::vec2(0, -(float)frame / 150.0f);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0, 0.001f, -17.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		t1.UseTexture();
+		meshList[3]->RenderMesh();
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+
+		toffset = glm::vec2(0, -(float)frame / 150.0f);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0, 0.001f, 2.0f));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		t3.UseTexture();
+		meshList[3]->RenderMesh();
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
+		glDisable(GL_BLEND);
+
 		glUseProgram(0);
 
 		mainWindow.swapBuffers();
 	}
 
-	animation.saveAnimationToFile("MarbleAnimation.txt");
-	animation2.saveAnimationToFile("Marble2Animation.txt");
 
 	return 0;
 }
